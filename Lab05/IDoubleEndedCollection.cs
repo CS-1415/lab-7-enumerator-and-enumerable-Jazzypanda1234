@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace Lab05;
 
 public interface IDoubleEndedCollection<T>
@@ -7,9 +9,9 @@ public interface IDoubleEndedCollection<T>
     void RemoveFirst(); void RemoveLast(); void ReverseList();
 }
 
-public class DoublyLinkedList<T> : IDoubleEndedCollection<T>
+public class DoublyLinkedList<T> : IDoubleEndedCollection<T>, IEnumerable<T>
 {
-    private DNode<T>? _head = null;
+    public DNode<T>? _head = null;
     private DNode<T>? _tail = null;
     public int Length { get; set; } = 0;
     public DoublyLinkedList(DNode<T>? _head, DNode<T>? _tail, int Length)
@@ -78,9 +80,9 @@ public class DoublyLinkedList<T> : IDoubleEndedCollection<T>
         //    otherwise:
         else
         {
-        //        set head's next to point to the new node
+        //        set head's previous to point to the new node
             _head.Previous = dNode;
-        //        set the new node's previous to point to head
+        //        set the new node's next to point to head
             dNode.Next = _head;
         //        set head to point to the new node
             _head = dNode;
@@ -138,5 +140,15 @@ public class DoublyLinkedList<T> : IDoubleEndedCollection<T>
         }
         _head = temp_head;
         _tail = temp_tail;
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        return new LinkedListEnumerator<T>(this);
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return new LinkedListEnumerator<T>(this);
     }
 }
